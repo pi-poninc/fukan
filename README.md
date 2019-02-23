@@ -1,6 +1,10 @@
 # fukan
 
-> My exceptional Nuxt.js project
+## Production
+- https://fukan-232601.firebaseapp.com/
+
+## Infra Architecture
+- https://drive.google.com/file/d/1yHL33q_6oZ1a6Tlxavtjfv3Gx_m98beX/view?usp=sharing
 
 ## Build Setup
 
@@ -19,4 +23,17 @@ $ yarn start
 $ yarn run generate
 ```
 
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+## Deploy
+
+### Firebase Hosting
+
+```bash
+firebase deploy --only hosting
+```
+
+### Firebase Cloud Functions
+
+```bash
+firebase deploy --only functions
+```
+
