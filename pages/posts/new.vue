@@ -6,8 +6,9 @@
   .posts__editor-screen
     .posts__editor-container
       editor-menu-bar(:editor='editor')
-      editor-content.editor__content(:editor='editor')
-  h3 JSON
+      editor-content.posts__editor-content(:editor='editor')
+  .export
+    h3 JSON
     pre
       code(v-html='json')
 </template>
@@ -75,6 +76,10 @@ export default {
             showOnlyWhenEditable: true
           })
         ],
+        content: `
+          <h1>タイトル</h1>
+          <p>本文</p>
+        `,
         onUpdate: ({ getJSON, getHTML }) => {
           this.json = getJSON()
           this.html = getHTML()
@@ -126,18 +131,36 @@ export default {
       margin-right: auto;
 
       // FIXME Placeholder表示に必要だが機能していない
-      & p.is-empty:first-child::before {
-        content: attr(data-empty-text);
-        float: left;
-        color: #aaa;
-        pointer-events: none;
-        height: 0;
-        font-style: italic;
-      }
+      // & p.is-empty:first-child::before {
+      //   content: attr(data-empty-text);
+      //   float: left;
+      //   color: #aaa;
+      //   pointer-events: none;
+      //   height: 0;
+      //   font-style: italic;
+      // }
     }
 
     &-content {
-      padding-bottom: 100px;
+      padding-bottom: 50px;
+    }
+  }
+
+  .export {
+    max-width: 1200px;
+
+    pre {
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      background: black;
+      color: white;
+
+      code {
+        display: block;
+        white-space: pre-wrap;
+      }
     }
   }
 }
