@@ -9,6 +9,8 @@ editor-menu-bar(:editor='this.editor')
       v-icon strikethrough_s
     button.menubar__button(:class="{ 'is-active': isActive.underline() }", @click='commands.underline')
       v-icon format_underline
+    button.menubar__button(@click="showImagePrompt(commands.image)")
+      v-icon add_photo_alternate
     button.menubar__button(:class="{ 'is-active': isActive.code() }", @click='commands.code')
       v-icon code
     button.menubar__button(:class="{ 'is-active': isActive.heading({ level: 1 }) }", @click='commands.heading({ level: 1 })')
@@ -47,6 +49,15 @@ export default {
     editor: {
       type: Object,
       required: true
+    }
+  },
+
+  methods: {
+    showImagePrompt(command) {
+      const src = prompt('Enter the url of your image here')
+      if (src !== null) {
+        command({ src })
+      }
     }
   }
 }

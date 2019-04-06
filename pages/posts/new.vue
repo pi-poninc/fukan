@@ -1,8 +1,15 @@
 <template lang="pug">
-.posts__editor-screen
-  .posts__editor-container
-    editor-menu-bar(:editor='editor')
-    editor-content(:editor='editor')
+.posts
+  .posts__editor-header
+      v-btn(color='error' @click='clearContent') キャンセル
+      v-btn(color='success' @click='setContent') 投稿
+  .posts__editor-screen
+    .posts__editor-container
+      editor-menu-bar(:editor='editor')
+      editor-content.editor__content(:editor='editor')
+  h3 JSON
+    pre
+      code(v-html='json')
 </template>
 
 <script>
@@ -24,7 +31,9 @@ import {
   Link,
   Strike,
   Underline,
-  History
+  History,
+  Image,
+  Placeholder
 } from 'tiptap-extensions'
 import EditorMenuBar from '~/components/molecules/editor/editor-menu-bar.vue'
 
@@ -38,6 +47,7 @@ export default {
 
   data() {
     return {
+      placeholder: 'Write something …',
       editor: new Editor({
         extensions: [
           new Blockquote(),
@@ -56,58 +66,79 @@ export default {
           new Link(),
           new Strike(),
           new Underline(),
-          new History()
+          new History(),
+          new Image(),
+          // FIXME Placeholder が表示されない
+          new Placeholder({
+            emptyClass: 'is-empty',
+            emptyNodeText: 'Write here...',
+            showOnlyWhenEditable: true
+          })
         ],
-        content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <pre><code>body { display: none; }</code></pre>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing 👏
-            <br />
-            – mom
-          </blockquote>
-        `
-      })
+        onUpdate: ({ getJSON, getHTML }) => {
+          this.json = getJSON()
+          this.html = getHTML()
+        }
+      }),
+      json: '',
+      html: ''
     }
   },
 
   beforeDestroy() {
     this.editor.destroy()
+  },
+
+  methods: {
+    clearContent() {
+      this.editor.clearContent(true)
+      this.editor.focus()
+    },
+
+    setContent() {
+      this.editor.setContent(this.json, true)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .posts {
-  &__editor-screen {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding-top: 70px;
-  }
+  display: flex;
+  flex-direction: column;
 
-  &__editor-container {
-    max-width: 825px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  &__editor {
+    &-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 30px;
+    }
 
-  &__editor-content {
-    padding-bottom: 100px;
+    &-screen {
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    &-container {
+      max-width: 1080px;
+      margin-left: auto;
+      margin-right: auto;
+
+      // FIXME Placeholder表示に必要だが機能していない
+      & p.is-empty:first-child::before {
+        content: attr(data-empty-text);
+        float: left;
+        color: #aaa;
+        pointer-events: none;
+        height: 0;
+        font-style: italic;
+      }
+    }
+
+    &-content {
+      padding-bottom: 100px;
+    }
   }
 }
 </style>
