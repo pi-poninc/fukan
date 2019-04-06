@@ -48,7 +48,6 @@ export default {
 
   data() {
     return {
-      placeholder: 'Write something …',
       editor: new Editor({
         extensions: [
           new Blockquote(),
