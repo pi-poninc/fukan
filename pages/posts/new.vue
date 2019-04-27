@@ -148,6 +148,7 @@ export default {
 
     &-content {
       padding-bottom: 50px;
+      border: 1px solid gray;
     }
   }
 
