@@ -33,9 +33,10 @@ import {
   Strike,
   Underline,
   History,
-  Image,
-  Placeholder
+  Image
+  // Placeholder
 } from 'tiptap-extensions'
+import firebase from '~/plugins/firebase'
 import EditorMenuBar from '~/components/molecules/editor/editor-menu-bar.vue'
 
 export default {
@@ -67,18 +68,15 @@ export default {
           new Strike(),
           new Underline(),
           new History(),
-          new Image(),
+          new Image()
           // FIXME Placeholder が表示されない
-          new Placeholder({
-            emptyClass: 'is-empty',
-            emptyNodeText: 'Write here...',
-            showOnlyWhenEditable: true
-          })
+          // new Placeholder({
+          //   emptyClass: 'is-empty',
+          //   emptyNodeText: 'Write here...',
+          //   showOnlyWhenEditable: true
+          // })
         ],
-        content: `
-          <h1>タイトル</h1>
-          <p>本文</p>
-        `,
+        content: this.html,
         onUpdate: ({ getJSON, getHTML }) => {
           this.json = getJSON()
           this.html = getHTML()
@@ -101,6 +99,14 @@ export default {
 
     setContent() {
       this.editor.setContent(this.json, true)
+      const db = firebase.firestore()
+      const article = {
+        content: this.json.content
+      }
+
+      db.collection('posts')
+        .doc('hoge')
+        .set(article, { merge: true })
     }
   }
 }
