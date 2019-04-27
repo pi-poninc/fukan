@@ -9,10 +9,12 @@
           v-list-tile-title(v-text='item.title')
   v-toolbar(:clipped-left='clipped' fixed app)
     v-toolbar-side-icon(@click='drawer = !drawer')
-    v-toolbar-title.fukan-header__app-title(@click='rootRedirect') FUKAN
+    v-toolbar-title.fukan-header__app-title
+      nuxt-link(to='/') FUKAN
     v-toolbar-title アップロード
     v-toolbar-title チュートリアル
-    v-toolbar-title 記事作成
+    v-toolbar-title
+      nuxt-link(to='/posts/new') 記事作成
     v-spacer
     .fukan-header__search-form
       v-text-field(label='search' placeholder='記事を検索' solo prepend-inner-icon='search')
@@ -41,17 +43,14 @@ export default {
       ],
       miniVariant: false
     }
-  },
-  methods: {
-    rootRedirect() {
-      console.log('redirect!')
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .fukan-header {
+  position: absolute;
+
   &__app-title {
     cursor: pointer;
   }
