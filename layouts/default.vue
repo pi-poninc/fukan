@@ -4,9 +4,9 @@ v-app
   v-content
     v-container
       nuxt
-  // v-footer(:height='80' app)
-  //   .footer-items(v-for='item in footerItems')
-  //     .footer-items__footer-item {{ item }}
+    v-footer(:height='80' app)
+      .footer-items(v-for='item in footerItems')
+        .footer-items__footer-item {{ item }}
 </template>
 
 <script>
