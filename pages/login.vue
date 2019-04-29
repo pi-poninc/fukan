@@ -22,10 +22,12 @@ export default {
       const userInfo = Object.assign(
         {},
         {
+          uid: user.uid,
           displayName: user.displayName,
           email: user.email,
           emailVerified: user.emailVerified,
           photoURL: user.photoURL,
+          phoneNumber: user.phoneNumber,
           providerData: user.providerData
         }
       )
