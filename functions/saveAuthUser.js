@@ -11,7 +11,8 @@ try {
   console.log(error)
 }
 
-const defaultUserIcon = ''
+const defaultUserIcon =
+  'https://img.icons8.com/cotton/64/000000/person-male.png'
 
 exports.saveUser = functions.auth.user().onCreate(async user => {
   try {
