@@ -1,16 +1,14 @@
 <template lang="pug">
 .posts
   .posts__editor-header
-      v-btn(color='error' @click='clearContent') キャンセル
+      v-btn(color='error' @click='quit') キャンセル
       v-btn(color='success' @click='setContent') 投稿
+  .posts__title
+    v-text-field(label='タイトル' v-model='title')
   .posts__editor-screen
     .posts__editor-container
       editor-menu-bar(:editor='editor')
       editor-content.posts__editor-content(:editor='editor')
-  .export
-    h3 JSON
-    pre
-      code(v-html='json')
 </template>
 
 <script>
@@ -77,14 +75,13 @@ export default {
           //   showOnlyWhenEditable: true
           // })
         ],
-        content: this.html,
-        onUpdate: ({ getJSON, getHTML }) => {
-          this.json = getJSON()
+        content: this.html || '<h1>ここから本文</h1>',
+        onUpdate: ({ getHTML }) => {
           this.html = getHTML()
         }
       }),
-      json: '',
-      html: ''
+      html: '',
+      title: ''
     }
   },
 
@@ -97,21 +94,27 @@ export default {
   },
 
   methods: {
-    clearContent() {
-      this.editor.clearContent(true)
-      this.editor.focus()
+    quit() {
+      this.editor.destroy()
+      this.$router.push('/')
     },
 
     setContent() {
-      this.editor.setContent(this.json, true)
+      this.editor.setContent(this.html, true)
       const db = firebase.firestore()
-      const article = {
-        content: this.json.content
+      const postData = {
+        authorId: this.currentUser.uid,
+        title: this.title,
+        content: this.html,
+        createdAt: new Date()
       }
 
-      db.collection('posts')
-        .doc(`${this.currentUser.uid}`)
-        .set(article, { merge: true })
+      const postRef = db.collection('posts').doc()
+      postData.id = postRef.id
+
+      postRef.set(postData).then(docRef => {
+        this.$router.replace('/')
+      })
     }
   }
 }
@@ -121,8 +124,11 @@ export default {
 .posts {
   display: flex;
   flex-direction: column;
+  width: 90%;
 
   &__editor {
+    position: relative;
+
     &-header {
       display: flex;
       justify-content: flex-end;
@@ -136,7 +142,6 @@ export default {
     }
 
     &-container {
-      max-width: 1080px;
       margin-left: auto;
       margin-right: auto;
 
@@ -153,25 +158,6 @@ export default {
 
     &-content {
       padding-bottom: 50px;
-      border: 1px solid gray;
-    }
-  }
-
-  .export {
-    max-width: 1200px;
-
-    pre {
-      padding: 1rem;
-      border-radius: 5px;
-      font-size: 14px;
-      font-weight: bold;
-      background: black;
-      color: white;
-
-      code {
-        display: block;
-        white-space: pre-wrap;
-      }
     }
   }
 }

@@ -1,18 +1,6 @@
 <template lang="pug">
-editor-menu-bar(:editor='this.editor')
-  .menubar(slot-scope='{ commands, isActive }')
-    button.menubar__button(:class="{ 'is-active': isActive.bold() }", @click='commands.bold')
-      v-icon format_bold
-    button.menubar__button(:class="{ 'is-active': isActive.italic() }", @click='commands.italic')
-      v-icon format_italic
-    button.menubar__button(:class="{ 'is-active': isActive.strike() }", @click='commands.strike')
-      v-icon strikethrough_s
-    button.menubar__button(:class="{ 'is-active': isActive.underline() }", @click='commands.underline')
-      v-icon format_underline
-    button.menubar__button(@click="showImagePrompt(commands.image)")
-      v-icon add_photo_alternate
-    button.menubar__button(:class="{ 'is-active': isActive.code() }", @click='commands.code')
-      v-icon code
+editor-floating-menu(:editor='this.editor')
+  .editor__floating-menu(slot-scope='{ commands, isActive, menu }', :class="{ 'is-active': menu.isActive }", :style='`top: ${menu.top}px`')
     button.menubar__button(:class="{ 'is-active': isActive.heading({ level: 1 }) }", @click='commands.heading({ level: 1 })')
       | H1
     button.menubar__button(:class="{ 'is-active': isActive.heading({ level: 2 }) }", @click='commands.heading({ level: 2 })')
@@ -27,22 +15,16 @@ editor-menu-bar(:editor='this.editor')
       v-icon format_quote
     button.menubar__button(:class="{ 'is-active': isActive.code_block() }", @click='commands.code_block')
       v-icon code
-    button.menubar__button(@click='commands.horizontal_rule')
-      v-icon border_horizontal
-    button.menubar__button(@click='commands.undo')
-      v-icon undo
-    button.menubar__button(@click='commands.redo')
-      v-icon redo
 </template>
 
 <script>
-import { EditorMenuBar } from 'tiptap'
+import { EditorFloatingMenu } from 'tiptap'
 
 export default {
   name: 'EditorMenuBar',
 
   components: {
-    'editor-menu-bar': EditorMenuBar
+    'editor-floating-menu': EditorFloatingMenu
   },
 
   props: {
@@ -62,3 +44,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.editor {
+  &__floating-menu {
+    position: absolute;
+    margin-top: -0.25rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+</style>
