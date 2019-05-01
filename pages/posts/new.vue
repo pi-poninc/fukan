@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Editor, EditorContent } from 'tiptap'
 import {
   Blockquote,
@@ -87,6 +88,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters('auth', { currentUser: 'user' })
+  },
+
   beforeDestroy() {
     this.editor.destroy()
   },
@@ -105,7 +110,7 @@ export default {
       }
 
       db.collection('posts')
-        .doc('hoge')
+        .doc(`${this.currentUser.uid}`)
         .set(article, { merge: true })
     }
   }

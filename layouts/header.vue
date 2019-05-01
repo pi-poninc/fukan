@@ -10,17 +10,23 @@
   v-toolbar(:clipped-left='clipped' fixed app)
     v-toolbar-side-icon(@click='drawer = !drawer')
     v-toolbar-title.fukan-header__app-title
-      nuxt-link(to='/') FUKAN
-    v-toolbar-title アップロード
-    v-toolbar-title チュートリアル
+      nuxt-link.fukan-header__link-label(to='/') FUKAN
     v-toolbar-title
-      nuxt-link(to='/posts/new') 記事作成
+      nuxt-link.fukan-header__link-label(to='/upload') アップロード
+    v-toolbar-title
+      nuxt-link.fukan-header__link-label(to='/tutorial') チュートリアル
+    v-toolbar-title
+      nuxt-link.fukan-header__link-label(to='/posts/new') 記事作成
     v-spacer
+    template(v-if='isLogin')
+      v-btn(color='success' @click='doLogout') ログアウト
     .fukan-header__search-form
       v-text-field(label='search' placeholder='記事を検索' solo prepend-inner-icon='search')
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'Header',
   data() {
@@ -43,6 +49,19 @@ export default {
       ],
       miniVariant: false
     }
+  },
+  computed: {
+    ...mapGetters('auth', ['isLogin'])
+  },
+  methods: {
+    ...mapActions('auth', ['logout']),
+    doLogout() {
+      this.logout()
+        .then(() => {
+          this.$router.push('/login')
+        })
+        .catch(error => console.log(error))
+    }
   }
 }
 </script>
@@ -53,6 +72,11 @@ export default {
 
   &__app-title {
     cursor: pointer;
+  }
+
+  &__link-label {
+    color: black;
+    text-decoration: none;
   }
 
   &__search-form {
