@@ -4,7 +4,7 @@ const serviceAccount = require('./config/service_account.json')
 try {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://fir-reacty-videos.firebaseio.com'
+    databaseURL: 'https://fukan-232601.firebaseio.com'
   })
   admin.firestore().settings({ timestampsInSnapshots: true })
 } catch (error) {

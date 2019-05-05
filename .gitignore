@@ -89,5 +89,6 @@ sw.*
 **/.firebaserc
 .runtimeconfig.json
 .firebase/
+functions/config/service_account.json
 
 .envrc
