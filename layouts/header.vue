@@ -16,6 +16,8 @@
     v-toolbar-title
       nuxt-link.fukan-header__link-label(to='/tutorial') チュートリアル
     v-toolbar-title
+      nuxt-link.fukan-header__link-label(to='/posts') 記事一覧
+    v-toolbar-title
       nuxt-link.fukan-header__link-label(to='/posts/new') 記事作成
     v-spacer
     template(v-if='isLogin')
