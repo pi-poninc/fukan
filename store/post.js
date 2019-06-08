@@ -24,6 +24,19 @@ export const actions = {
     } catch (error) {
       console.log(error)
     }
+  },
+
+  fetch({ commit }, id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const postRef = await firestore.collection('posts').doc(id)
+        const postData = await postRef.get()
+        resolve(postData.data())
+      } catch (error) {
+        console.log(error)
+        reject(error)
+      }
+    })
   }
 }
 
